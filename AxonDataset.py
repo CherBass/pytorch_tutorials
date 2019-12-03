@@ -17,11 +17,15 @@ class AxonDataset(Dataset):
         self.transform = transform
         self.resize = resize
         self.normalise = normalise
+        mmap_mode = 'r'
 
         __location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-        self.x_data, self.y_data = load_dataset(type, folder, data_name)
+        x_path = os.path.join(__location__, 'npy_data', data_name + '_data_' + type + '.npy')
+        x_path = os.path.join(__location__,'npy_data', data_name + '_mask_' + type + '.npy')
+        self.x_data = np.load(x_path, mmap_mode=mmap_mode)
+        self.y_data = np.load(x_path, mmap_mode=mmap_mode)
         self.len_data = len(self.x_data)
 
     def __len__(self):
