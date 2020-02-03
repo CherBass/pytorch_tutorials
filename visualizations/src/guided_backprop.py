@@ -42,8 +42,7 @@ class GuidedBackprop():
             """
             If there is a negative gradient, change it to zero
             """
-            # Get last forward output
-            corresponding_forward_output = self.forward_relu_outputs[-1]
+            corresponding_forward_output = self.forward_relu_outputs[-1]            
             corresponding_forward_output[corresponding_forward_output > 0] = 1
             modified_grad_out = corresponding_forward_output * torch.clamp(grad_in[0], min=0.0)
             del self.forward_relu_outputs[-1]  # Remove last forward output

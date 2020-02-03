@@ -7,6 +7,7 @@ import os
 import copy
 import numpy as np
 from PIL import Image
+import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_color_map
 
 import torch
@@ -49,6 +50,11 @@ def save_gradient_images(gradient, file_name):
     path_to_file = os.path.join('./generated', file_name + '.jpg')
     save_image(gradient, path_to_file)
 
+def normalise_gradient(gradient):
+    # Normalize
+    gradient = gradient - gradient.min()
+    gradient /= gradient.max()
+    return gradient
 
 def save_class_activation_images(org_img, activation_map, file_name):
     """
@@ -135,8 +141,22 @@ def save_image(im, path):
     if isinstance(im, (np.ndarray, np.generic)):
         im = format_np_output(im)
         im = Image.fromarray(im)
+    
     im.save(path)
 
+def plot_image(im):
+    """
+        plot a numpy matrix or PIL image as an image
+    Args:
+        im_as_arr (Numpy array): Matrix of shape DxWxH
+        path (str): Path to the image
+    """
+    if isinstance(im, (np.ndarray, np.generic)):
+        im = format_np_output(im)
+        im = Image.fromarray(im)
+    print('im shape',np.float32(im).shape)
+    plt.imshow(np.float32(im))
+    plt.show
 
 def preprocess_image(pil_im, resize_im=True):
     """
